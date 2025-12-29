@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Голосовой помощник</title>
+  <link rel="stylesheet" href="/static/css/styles.css"/>
+</head>
+<body>
+  <div class="bg"></div>
+
+  <div class="phone">
+    <div class="phone-top">
+      <div class="brand">
+        <div class="brand-title">Голосовой помощник</div>
+        <div class="brand-sub">Готов к работе</div>
+      </div>
+      <div class="top-actions">
+        <button class="icon-btn" id="devicesBtn" title="Устройства">⚙︎</button>
+        <button class="icon-btn" id="settingsBtn" title="Настройки">☰</button>
+      </div>
+    </div>
+
+    <div class="chat" id="chat">
+      <div class="bubble system">
+        Привет! Я ваш голосовой помощник. Чем могу помочь?
+      </div>
+    </div>
+
+    <div class="composer">
+      <input id="textInput" type="text" placeholder="Введите сообщение..." autocomplete="off"/>
+      <button class="circle-btn" id="sendBtn" title="Отправить">▶</button>
+      <button class="circle-btn" id="micBtn" title="Микрофон">🎤</button>
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div class="modal-backdrop hidden" id="settingsModal">
+    <div class="modal">
+      <div class="modal-head">
+        <div class="modal-title">Настройки системы</div>
+        <button class="icon-btn" id="settingsClose">✕</button>
+      </div>
+
+      <div class="tabs">
+        <button class="tab active" data-tab="tab-main">Основные</button>
+        <button class="tab" data-tab="tab-style">Стиль системы</button>
+        <button class="tab" data-tab="tab-special">Спец. команды</button>
+      </div>
+
+      <div class="tab-body" id="tab-main">
+        <div class="row">
+          <div class="row-text">
+            <div class="row-title">Голосовые ответы</div>
+            <div class="row-sub">Воспроизводить голосовые ответы</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="voiceAnswers"/>
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="row">
+          <div class="row-text">
+            <div class="row-title">Автоподтверждение</div>
+            <div class="row-sub">Выполнять команды без подтверждения</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="autoConfirm"/>
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="row">
+          <div class="row-text">
+            <div class="row-title">Подавление шума</div>
+            <div class="row-sub">Улучшенное распознавание в шумной среде</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="noiseSuppression"/>
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="row">
+          <div class="row-text">
+            <div class="row-title">Экстренные команды</div>
+            <div class="row-sub">Приоритетная обработка «Стоп» / «Пауза»</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="emergencyCommands"/>
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <button class="primary" id="saveMain">Сохранить настройки</button>
+      </div>
+
+      <div class="tab-body hidden" id="tab-style">
+        <label class="field">
+          <div class="label">Тембр голоса</div>
+          <select id="voiceTimbre">
+            <option>Женский</option>
+            <option>Мужской</option>
+            <option>Нейтральный</option>
+          </select>
+        </label>
+
+        <label class="field">
+          <div class="label">Скорость речи</div>
+          <input type="range" id="speechSpeed" min="0.5" max="1.5" step="0.1"/>
+          <div class="hint" id="speechSpeedHint"></div>
+        </label>
+
+        <label class="field">
+          <div class="label">Громкость</div>
+          <input type="range" id="volume" min="0" max="100" step="1"/>
+          <div class="hint" id="volumeHint"></div>
+        </label>
+
+        <label class="field">
+          <div class="label">Тон голоса</div>
+          <select id="tone">
+            <option>Стандартный</option>
+            <option>Мягкий</option>
+            <option>Строгий</option>
+          </select>
+        </label>
+
+        <button class="primary" id="saveStyle">Сохранить настройки</button>
+      </div>
+
+      <div class="tab-body hidden" id="tab-special">
+        <div class="section-title">Новое служебное слово</div>
+        <div class="inline">
+          <input id="serviceWord" placeholder="Введите новое слово..."/>
+          <button class="primary small" id="addServiceWord">Добавить</button>
+        </div>
+
+        <div class="section-title">Последовательность действий</div>
+        <input id="seqName" placeholder="Название последовательности..."/>
+        <textarea id="seqSteps" placeholder="Шаги, по одному на строку..."></textarea>
+        <button class="primary" id="saveSequence">Сохранить последовательность</button>
+
+        <div class="section-title">Hot Keys</div>
+        <div class="muted">Заглушка: UI есть, а реальную интеграцию с ОС можно добавить позже.</div>
+        <input placeholder="Комбинация клавиш..." disabled/>
+        <input placeholder="Действие..." disabled/>
+      </div>
+    </div>
+  </div>
+
+  <!-- Devices Modal -->
+  <div class="modal-backdrop hidden" id="devicesModal">
+    <div class="modal">
+      <div class="modal-head">
+        <div class="modal-title">Управление устройствами</div>
+        <button class="icon-btn" id="devicesClose">✕</button>
+      </div>
+
+      <div class="devices" id="devicesList"></div>
+
+      <div class="add-device">
+        <select id="newDeviceType">
+          <option value="thermostat">Термостат</option>
+          <option value="vacuum">Робот-пылесос</option>
+          <option value="camera">Камера безопасности</option>
+          <option value="coffee">Кофемашина</option>
+          <option value="ac">Кондиционер</option>
+          <option value="light">Умный свет</option>
+          <option value="tv">Телевизор</option>
+        </select>
+        <input id="newDeviceName" placeholder="Название устройства"/>
+        <button class="primary" id="addDeviceBtn">Добавить устройство</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
