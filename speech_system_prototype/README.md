@@ -15,7 +15,7 @@ pip install -r requirements.txt
 Скачать русскую модель и распаковать в папку `models/`, например:
 - `models/vosk-model-small-ru-0.22/`
 
-Официальный репозиторий Vosk: см. документацию. [citeturn0search6turn0search9](https://alphacephei.com/vosk/models)
+Официальный репозиторий Vosk: см. [документацию](https://alphacephei.com/vosk/models).
 
 3) Указать путь к модели
 Вариант A (env var):
